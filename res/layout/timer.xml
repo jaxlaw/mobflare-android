@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_height="fill_parent" android:layout_width="fill_parent"
+   android:orientation="horizontal">
+
+   <LinearLayout android:orientation="vertical"
+      android:layout_height="wrap_content" android:layout_width="fill_parent"
+      android:layout_gravity="center">
+
+      <TextView android:text="@string/active_flare"
+         android:layout_width="wrap_content" android:layout_height="wrap_content"
+         android:layout_gravity="center" android:textSize="15sp"
+         android:layout_marginTop="30dp"></TextView>
+
+      <TextView android:text="" android:id="@+id/flare_name"
+         android:layout_width="wrap_content" android:layout_height="wrap_content"
+         android:layout_gravity="center" android:textSize="15sp"
+         android:textColor="@color/blue"
+         android:layout_marginTop="30dp"></TextView>
+
+      <TextView android:text="@string/total_time_remaining"
+         android:layout_width="wrap_content" android:layout_height="wrap_content"
+         android:layout_gravity="center" android:textSize="15sp"
+         android:layout_marginTop="30dp"></TextView>
+
+      <TextView android:id="@+id/total_time_remaining"
+         android:text="00:00" android:layout_width="wrap_content"
+         android:layout_height="wrap_content" android:layout_gravity="center"
+         android:textSize="35sp" android:layout_marginTop="5dp"></TextView>
+
+      <Button android:text="@string/quit"
+         android:layout_width="wrap_content" android:layout_height="wrap_content"
+         android:layout_gravity="center" android:layout_marginTop="15dp"
+         android:onClick="onQuitClicked" />
+
+   </LinearLayout>
+   <SurfaceView
+       android:id="@+id/surfaceview"
+       android:layout_width="1dp"
+       android:layout_height="1dp" />
+</LinearLayout>

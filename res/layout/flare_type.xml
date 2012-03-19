@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="vertical"
+   android:layout_height="wrap_content" android:layout_width="fill_parent"
+   android:layout_gravity="center">
+
+  <GridView android:id="@+id/flaregrid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnWidth="75dp"
+            android:numColumns="5"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center"/>
+
+  <TextView android:text="@string/choose_flare_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp" />
+
+  <RadioGroup
+      android:id="@+id/flare_type_group"
+      android:layout_marginTop="30dp"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/round_border"
+      android:orientation="vertical">
+    <RadioButton android:id="@+id/flare_type_once"
+                 android:checked="true"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/flare_type_once"
+                 android:onClick="onRadioButtonClicked"/>
+    <RadioButton android:id="@+id/flare_type_repeat"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/flare_type_repeat"
+                 android:onClick="onRadioButtonClicked"/>
+    <RadioButton android:id="@+id/flare_type_wave"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/flare_type_wave"
+                 android:onClick="onRadioButtonClicked"/>
+    <RadioButton android:id="@+id/flare_type_wave_repeat"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/flare_type_wave_repeat"
+                 android:onClick="onRadioButtonClicked"/>
+  </RadioGroup>
+
+  <Button android:text="@string/next"
+          android:layout_width="wrap_content" 
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginTop="20dp"
+          android:onClick="onNextClicked" />
+
+</LinearLayout>

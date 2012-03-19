@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="vertical"
+   android:layout_height="wrap_content" android:layout_width="fill_parent"
+   android:layout_gravity="center">
+
+   <TextView android:text="@string/number_of_participants"
+      android:layout_width="wrap_content" android:layout_height="wrap_content"
+      android:layout_gravity="center" android:textSize="15sp" 
+      android:id="@+id/flare_prop_text" />
+
+   <NumberPicker
+      android:layout_marginTop="5dp"
+      android:id="@+id/num_participants"
+      android:layout_marginLeft="100dp" android:layout_marginRight="100dp"
+      android:layout_height="wrap_content"
+      android:layout_width="fill_parent"
+      android:descendantFocusability="blocksDescendants"
+      android:gravity="center" />
+
+   <Button android:text="@string/next" android:id="@+id/next_button"
+      android:layout_width="wrap_content" android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_marginTop="20dp" 
+      android:onClick="onNextClicked" />
+
+   <TextView android:text="@string/number_of_participants_hint"
+      android:layout_width="wrap_content" android:layout_height="wrap_content"
+      android:layout_gravity="center" android:textSize="15sp"
+      android:id="@+id/flare_prop_hint" 
+      android:layout_marginTop="20dp" />
+
+</LinearLayout>
