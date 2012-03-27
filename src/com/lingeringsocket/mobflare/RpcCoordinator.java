@@ -73,16 +73,27 @@ class RpcCoordinator
                     httpResponse.getEntity().getContent());
             JSONTokener tokener = new JSONTokener(json);
             JSONArray jsonArray = new JSONArray(tokener);
-            // sort flares by distance
-            SortedMap<Double, String> sortedMap =
-                new TreeMap<Double, String>();
+            // sort flares by distance; fake a multimap just to deal
+            // with the pathological case of equal distances,
+            // which actually comes up during testing on
+            // an emulator
+            SortedMap<Double, List<String>> sortedMap =
+                new TreeMap<Double, List<String>>();
             for (int i = 0; i < jsonArray.length(); ++i) {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
                 String name = jsonObj.getString("name");
                 double distance = jsonObj.getDouble("km");
-                sortedMap.put(distance, name);
+                List<String> list = sortedMap.get(distance);
+                if (list == null) {
+                    list = new ArrayList<String>();
+                    sortedMap.put(distance, list);
+                }
+                list.add(name);
             }
-            List<String> flareList = new ArrayList<String>(sortedMap.values());
+            List<String> flareList = new ArrayList<String>();
+            for (List<String> list : sortedMap.values()) {
+                flareList.addAll(list);
+            }
             return flareList;
         } catch (Exception ex) {
             Log.e(LOGTAG, "HTTP GET failed", ex);

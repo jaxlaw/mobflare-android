@@ -27,6 +27,8 @@ import android.util.*;
 import android.view.*;
 import android.widget.*;
 
+import com.michaelnovakjr.numberpicker.*;
+
 /**
  * Interacts with the user to define properties of a new flare.
  */
@@ -99,7 +101,7 @@ public class FlareSetting extends Activity
     public void onNextClicked(View v)
     {
         FlareProperty modifiedProp = props.get(iProp);
-        modifiedProp.val = numberPicker.getValue();
+        modifiedProp.val = numberPicker.getCurrent();
         ++iProp;
         if (iProp < props.size()) {
             initializePropView();
@@ -136,10 +138,9 @@ public class FlareSetting extends Activity
     {
         FlareProperty prop = props.get(iProp);
 
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(1000000);
-        numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setValue(prop.defaultVal);
+        numberPicker.setRange(1, 1000000, null);
+        numberPicker.setWrap(false);
+        numberPicker.setCurrent(prop.defaultVal);
 
         descText.setText(prop.descResource);
         hintText.setText(prop.hintResource);
