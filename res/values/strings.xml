@@ -35,7 +35,7 @@
    <string name="number_of_participants_hint">You yourself will be treated as a participant, so if you leave this set to 1, there will be no waiting period before the countdown starts. </string>
 
    <string name="countdown_seconds">After enough people have joined, how many seconds should the pre-flash countdown last?</string>
-   <string name="countdown_seconds_hint">Usually at least 10 seconds is enough to ensure that all phones will get the firing signal in time, but you can increase this to give optional participants a chance to join in.</string>
+   <string name="countdown_seconds_hint">Usually 10 seconds are enough to ensure that all phones will get the firing signal in time, but you can increase this to give optional participants a chance to join in.</string>
 
    <string name="repeat_seconds">After the first flash, how many seconds should elapse between repeats?</string>
    <string name="repeat_seconds_hint">The flare will keep repeating until all participants quit.</string>

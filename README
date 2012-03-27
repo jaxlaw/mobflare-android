@@ -1,6 +1,10 @@
 This is the Android client for Mobflare.  For more information,
 see http://www.mobflare.com
 
+The build requires this library:
+
+https://github.com/mrn/numberpicker
+
 Copyright 2012 Lingering Socket Labs
 
 Licensed under the Apache License, Version 2.0 (the "License");
