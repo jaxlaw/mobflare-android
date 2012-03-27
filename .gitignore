@@ -1,6 +1,7 @@
 build.xml
 local.properties
 proguard-project.txt
+proguard.cfg
 project.properties
 bin
 gen
