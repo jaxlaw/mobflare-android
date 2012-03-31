@@ -15,7 +15,7 @@
    <string name="flare_timer">Flare Timer</string>
    <string name="creating_flare">Creating flare&#8230;</string>
    <string name="flare_refresh">Searching for flares&#8230;</string>
-   <string name="obtaining_location">Obtaining location&#8230;</string>
+   <string name="obtaining_location">Obtaining location&#8230;\n(press Back button to cancel and use bogus location)</string>
 
    <string name="choose_flare">Or choose a nearby flare to join:</string>
    <string name="choose_flare_type">What kind of flare do you want to create?</string>

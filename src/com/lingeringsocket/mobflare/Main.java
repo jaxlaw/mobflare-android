@@ -43,6 +43,7 @@ public class Main extends Activity
     private String emptyMessage;
     private RefreshLocationTask locationTask;
     private Location newFlareLocation;
+    private boolean bogusLocation;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -125,6 +126,17 @@ public class Main extends Activity
         locationTask.execute();
     }
 
+    private float getSearchRadius()
+    {
+        if (bogusLocation) {
+            // search all flares on Earth since we don't know where
+            // we are
+            return 100000;
+        } else {
+            return Prefs.getSearchRadius(this);
+        }
+    }
+    
     private void refreshFlares(Location location) 
     {
         if (location == null) {
@@ -193,7 +205,7 @@ public class Main extends Activity
         @Override
         protected List<String> executeCall(Void... v) throws Exception
         {
-            return rpcCoordinator.listFlares(location);
+            return rpcCoordinator.listFlares(location, getSearchRadius());
         }
 
         @Override
@@ -217,14 +229,14 @@ public class Main extends Activity
             super(Main.this);
         }
 
-        protected void onPostExecute(Location result)
+        protected void onLocationObtained(Location result, boolean isBogus)
         {
-            super.onPostExecute(result);
             if (isBlocking()) {
                 refreshFlares(result);
             } else {
                 newFlareLocation = result;
             }
+            bogusLocation = isBogus;
             locationTask = null;
         }
     }

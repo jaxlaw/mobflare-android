@@ -25,9 +25,10 @@ import android.util.*;
 /**
  * Subclasses AsyncTask to get GPS location.
  */
-class LocationTask extends AsyncTask<Void, Void, Location>
+abstract class LocationTask extends AsyncTask<Void, Void, Location>
 {
     private static String LOGTAG = "LocationTask";
+    private static long TIMEOUT_MILLIS = 120000;
 
     private LocationManager locationManager;
     private String provider;
@@ -37,6 +38,7 @@ class LocationTask extends AsyncTask<Void, Void, Location>
     private Location location;
     private boolean done;
     private boolean blocking;
+    private ListenerCallback listener;
 
     LocationTask(Activity activity)
     {
@@ -51,6 +53,7 @@ class LocationTask extends AsyncTask<Void, Void, Location>
         criteria.setCostAllowed(true);
         provider = locationManager.getBestProvider(criteria, true);
         location = locationManager.getLastKnownLocation(provider);
+        listener = new ListenerCallback();
     }
 
     Location getLastLocation()
@@ -61,29 +64,42 @@ class LocationTask extends AsyncTask<Void, Void, Location>
     @Override
     protected void onPreExecute()
     {
-        ListenerCallback listenerCallback = new ListenerCallback();
-
         if (blocking) {
             progress = new ProgressDialog(activity);
             progress.setMessage(
                 activity.getString(R.string.obtaining_location));
             progress.setIndeterminate(true);
-            progress.setCancelable(false);
+            progress.setCancelable(true);
+            progress.setOnCancelListener(
+                new DialogInterface.OnCancelListener()
+                {
+                    public void onCancel(DialogInterface dialog)
+                    {
+                        cancel(true);
+                    }
+                });
             progress.show();
         }
 
         monitor = new Object();
-        locationManager.requestSingleUpdate(provider, listenerCallback, null);
+        locationManager.requestLocationUpdates(provider, 0, 0, listener);
     }
 
     @Override
     protected Location doInBackground(Void... params)
     {
+        long expiry = System.currentTimeMillis() + TIMEOUT_MILLIS;
         synchronized (monitor) {
             while (!done) {
                 try {
-                    monitor.wait();
+                    long delta = expiry - System.currentTimeMillis();
+                    if (delta < 0) {
+                        // give up
+                        break;
+                    }
+                    monitor.wait(delta);
                 } catch (InterruptedException ex) {
+                    // someone requested cancel
                     break;
                 }
             }
@@ -91,16 +107,38 @@ class LocationTask extends AsyncTask<Void, Void, Location>
         return location;
     }
 
+    protected abstract void onLocationObtained(Location result, boolean isBogus);
+
+    private void locationObtained(Location result)
+    {
+        boolean isBogus = false;
+        if (result == null) {
+            result = new Location(LocationManager.GPS_PROVIDER);
+            isBogus = true;
+        }
+        onLocationObtained(result, isBogus);
+    }
+    
     protected void onPostExecute(Location result)
     {
+        super.onPostExecute(result);
         if (progress != null) {
             progress.dismiss();
             progress = null;
         }
+        locationManager.removeUpdates(listener);
+        locationObtained(result);
     }
 
+    protected void onCancelled()
+    {
+        locationManager.removeUpdates(listener);
+        locationObtained(null);
+    }
+    
     void notifyUnavailable()
     {
+        locationManager.removeUpdates(listener);
         synchronized (monitor) {
             done = true;
             monitor.notifyAll();
@@ -125,6 +163,7 @@ class LocationTask extends AsyncTask<Void, Void, Location>
             synchronized (monitor) {
                 LocationTask.this.location = location;
                 done = true;
+                locationManager.removeUpdates(this);
                 monitor.notifyAll();
             }
         }

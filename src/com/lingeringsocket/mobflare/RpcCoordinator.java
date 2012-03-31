@@ -43,9 +43,9 @@ class RpcCoordinator
     private static String LOGTAG = "RpcCoordinator";
 
     private Context context;
-    private String serverUri;
     private int errId;
     private static HttpClient httpClient;
+    private HttpUriRequest abortableRequest;
 
     static 
     {
@@ -56,15 +56,19 @@ class RpcCoordinator
     RpcCoordinator(Context context) 
     {
         this.context = context;
-        serverUri = Prefs.getServerUri(context);
+    }
+
+    private String getServerUri()
+    {
+        return Prefs.getServerUri(context);
     }
     
-    List<String> listFlares(Location location) throws Exception
+    List<String> listFlares(Location location, float radius) throws Exception
     {
-        String uri = serverUri + "/list?latitude="
+        String uri = getServerUri() + "/list?latitude="
             + location.getLatitude() + "&longitude="
             + location.getLongitude() + "&radius="
-            + Prefs.getSearchRadius(context);
+            + radius;
         HttpGet httpGet = new HttpGet(uri);
         try {
             HttpResponse httpResponse = execute(httpGet);
@@ -104,14 +108,23 @@ class RpcCoordinator
     private URI generateFlareUri(String flareName) throws Exception
     {
         return new URI(
-            serverUri + "/flare/" + URLEncoder.encode(flareName, "UTF-8"));
+            getServerUri() + "/flare/" + URLEncoder.encode(flareName, "UTF-8"));
     }
 
     private HttpResponse execute(HttpUriRequest request) throws Exception
     {
         errId = R.string.server_error;
         httpClient.getConnectionManager().closeExpiredConnections();
-        return httpClient.execute(request);
+        try {
+            synchronized(this) {
+                abortableRequest = request;
+            }
+            return httpClient.execute(request);
+        } finally {
+            synchronized(this) {
+                abortableRequest = null;
+            }
+        }
     }
     
     JSONObject getFlare(String flareName) throws Exception
@@ -183,6 +196,13 @@ class RpcCoordinator
         }
     }
 
+    synchronized void cancel()
+    {
+        if (abortableRequest != null) {
+            abortableRequest.abort();
+        }
+    }
+    
     private static String readInputStream(InputStream is) throws IOException
     {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();

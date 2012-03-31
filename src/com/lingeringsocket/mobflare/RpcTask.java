@@ -17,6 +17,7 @@ package com.lingeringsocket.mobflare;
 
 import android.os.*;
 import android.app.*;
+import android.content.*;
 import android.widget.*;
 
 /**
@@ -29,6 +30,7 @@ abstract class RpcTask<Params, Progress, Result>
     private RpcCoordinator rpcCoordinator;
     protected ProgressDialog progress;
     private Exception ex;
+    private boolean aborted;
 
     void setCoordinator(RpcCoordinator rpcCoordinator)
     {
@@ -40,7 +42,16 @@ abstract class RpcTask<Params, Progress, Result>
     {
         if (progress != null) {
             progress.setIndeterminate(true);
-            progress.setCancelable(false);
+            progress.setCancelable(true);
+            progress.setOnCancelListener(
+                new DialogInterface.OnCancelListener()
+                {
+                    public void onCancel(DialogInterface dialog)
+                    {
+                        aborted = true;
+                        rpcCoordinator.cancel();
+                    }
+                });
             progress.show();
         }
     }
@@ -77,7 +88,9 @@ abstract class RpcTask<Params, Progress, Result>
                 progress.getContext(), errId,
                 Toast.LENGTH_LONG);
             progress.dismiss();
-            toast.show();
+            if (!aborted) {
+                toast.show();
+            }
         }
     }
 }
