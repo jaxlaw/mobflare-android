@@ -20,6 +20,7 @@ import java.io.*;
 
 import android.app.*;
 import android.content.*;
+import android.content.pm.*;
 import android.location.*;
 import android.os.*;
 import android.text.*;
@@ -44,6 +45,7 @@ public class Main extends Activity
     private RefreshLocationTask locationTask;
     private Location newFlareLocation;
     private boolean bogusLocation;
+    private int clientVersion;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -73,6 +75,14 @@ public class Main extends Activity
                 }
             }
             );
+
+        try {
+            PackageInfo pInfo =
+                getPackageManager().getPackageInfo(getPackageName(), 0);
+            clientVersion = pInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException ex) {
+            clientVersion = 0;
+        }
 
         rpcCoordinator = new RpcCoordinator(this);
         refresh();
@@ -205,7 +215,8 @@ public class Main extends Activity
         @Override
         protected List<String> executeCall(Void... v) throws Exception
         {
-            return rpcCoordinator.listFlares(location, getSearchRadius());
+            return rpcCoordinator.listFlares(
+                location, getSearchRadius(), clientVersion);
         }
 
         @Override

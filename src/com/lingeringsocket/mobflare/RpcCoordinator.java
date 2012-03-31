@@ -62,16 +62,22 @@ class RpcCoordinator
     {
         return Prefs.getServerUri(context);
     }
-    
-    List<String> listFlares(Location location, float radius) throws Exception
+
+    List<String> listFlares(Location location, float radius, int clientVersion)
+        throws Exception
     {
         String uri = getServerUri() + "/list?latitude="
             + location.getLatitude() + "&longitude="
             + location.getLongitude() + "&radius="
-            + radius;
+            + radius + "&clientVersion="
+            + clientVersion;
         HttpGet httpGet = new HttpGet(uri);
         try {
             HttpResponse httpResponse = execute(httpGet);
+            if (httpResponse.getStatusLine().getStatusCode() == 403) {
+                errId = R.string.need_upgrade;
+                throw new RuntimeException("Obsolete client version");
+            }
             String json =
                 readInputStream(
                     httpResponse.getEntity().getContent());

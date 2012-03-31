@@ -64,6 +64,7 @@
    <string name="server_error">Failed to access server</string>
    <string name="duplicate_flare_name">Flare name already in use; please choose another and try again</string>
    <string name="invalid_flare">Oops, selected flare no longer exists</string>
+   <string name="need_upgrade">Your client is out of date; please upgrade to the latest version</string>
 
    <string name="refresh_label">Refresh</string>
    <string name="settings_label">Settings</string>
