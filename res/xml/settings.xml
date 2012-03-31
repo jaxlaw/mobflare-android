@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
    <EditTextPreference android:key="server_uri"
       android:title="@string/server_uri" android:summary="@string/server_uri_summary"
-      android:defaultValue="http://mobflare.com:8080/mobflare" android:inputType="textUri" />
+      android:defaultValue="http://rpc.mobflare.com:8080/mobflare" android:inputType="textUri" />
    <EditTextPreference android:key="search_radius"
       android:title="@string/search_radius" android:summary="@string/search_radius_summary"
       android:defaultValue="2.0" android:inputType="numberDecimal" />

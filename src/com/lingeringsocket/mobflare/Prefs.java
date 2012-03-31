@@ -22,7 +22,7 @@ import android.preference.*;
 public class Prefs extends PreferenceActivity {
     private static final String SERVER_URI = "server_uri";
     private static final String SERVER_URI_DEFAULT =
-        "http://mobflare.com:8080/mobflare";
+        "http://rpc.mobflare.com:8080/mobflare";
 
     private static final String SEARCH_RADIUS = "search_radius";
     private static final String SEARCH_RADIUS_DEFAULT = "2.0";
