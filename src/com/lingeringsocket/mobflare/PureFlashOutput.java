@@ -41,6 +41,12 @@ class PureFlashOutput implements FlareOutput, SurfaceHolder.Callback
         SurfaceHolder holder = surfaceView.getHolder();
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        if (holder.getSurface() != null) {
+            // If the surface was already created, the callback
+            // won't be automatically invoked, so we have to do it
+            // ourselves.
+            surfaceCreated(holder);
+        }
     }
 
     @Override
